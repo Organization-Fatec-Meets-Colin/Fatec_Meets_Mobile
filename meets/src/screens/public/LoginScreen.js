@@ -10,7 +10,7 @@ export default function LoginScreen({navigation}) {
 
         <View style={styles.formContainer}>
             <Text style={styles.loginTitle}>
-                Acesse seu Login
+                ACESSE SEU PERFIL
             </Text>
 
             <View style={styles.inputContainer}>
@@ -18,8 +18,8 @@ export default function LoginScreen({navigation}) {
                     E-mail:
                 </Text>
                 <TextInput
-                    placeholder='exemplo@escola.com'
                     style={styles.input}
+                    placeholder='exemplo@escola.com'
                 />
             </View>
 
@@ -28,10 +28,25 @@ export default function LoginScreen({navigation}) {
                     Senha:
                 </Text>
                 <TextInput
+                    style={styles.input}
                     placeholder='Password'
                     secureTextEntry={true}
-                    style={styles.input}
                 />
+            </View>
+
+            <TouchableOpacity>
+                <View style={styles.btnEntrar}>
+                    <Text style={styles.btnEntrarText}>Entrar</Text>
+                </View>
+            </TouchableOpacity>
+
+            <View style={styles.linkArea}>
+                <TouchableOpacity>
+                    <Text style={styles.links}>RECUPERAR SENHA</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Text style={styles.links}>CADASTRAR</Text>
+                </TouchableOpacity>
             </View>
 
         </View>
@@ -40,30 +55,69 @@ export default function LoginScreen({navigation}) {
 }
 
 const styles=StyleSheet.create({
-    mainConteiner: {
+    mainContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
         margin: 0,
         padding: 0,
     },
 
+    // Container Geral
     formContainer:{
+        flex: 1,
+        justifyContent: 'space-between',
         alignItems: 'center',
-        justifyContent: 'center',
+        marginTop: 50,
+        marginBottom: 200,
     },
 
+    // Titulo form
     loginTitle:{
+        color: '#9C2222',
         fontSize: 25,
         fontWeight: 'bold',
-        fontFamily: ,
+        fontFamily: 'Varela',
     },
 
+    // Parte de Inserir
     inputContainer:{
-
+        // justifyContent: 'center',
+        // alignItems: 'center',
     },
 
     input:{
+        borderWidth: 1,
+        borderColor: '#000',
+        borderRadius: 50,
+        width: 300,
+        height: 50,
+    },
 
-    }
+    // Botão de entrar
+    btnEntrar:{
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#9C2222',
+        borderWidth: 1,
+        borderColor: '#000',
+        borderRadius: 10,
+        width: 125,
+        height: 45,
+    },
+
+    btnEntrarText:{
+        color: '#FFF',
+        fontFamily: 'Varela',
+        fontWeight: 'bold',
+        fontSize: 15,
+    },
+
+
+    // Links de Recuperar Senha e Cadastrar
+    links:{
+        color: '#9C2222',
+        textDecorationLine: 'underline',
+        fontWeight: 'bold',
+        fontSize: 20,
+        margin: 10,
+    },
 })
