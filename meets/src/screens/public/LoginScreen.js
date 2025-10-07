@@ -1,8 +1,14 @@
 import { SafeAreaViewBase, StyleSheet, Text, TextInput, Touchable, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import { NavigationContainer, useNavigation } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
+import { useState } from 'react';
+import StylizedInput from '../../components/StylizedInput';
 
 export default function LoginScreen({navigation}) {
+
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [showPassword, setShowPassword] = useState(true);
 
   return(
     <View style={styles.mainContainer}>
@@ -13,25 +19,26 @@ export default function LoginScreen({navigation}) {
                 ACESSE SEU PERFIL
             </Text>
 
-            <View style={styles.inputContainer}>
-                <Text>
-                    E-mail:
-                </Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder='exemplo@escola.com'
-                />
-            </View>
+            <StylizedInput/>
 
             <View style={styles.inputContainer}>
-                <Text>
+                <Text style={styles.inputText}>
                     Senha:
                 </Text>
-                <TextInput
-                    style={styles.input}
-                    placeholder='Password'
-                    secureTextEntry={true}
-                />
+                <View style={styles.subContainerInput}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder='Password'
+                        secureTextEntry={showPassword}
+                        value={password}
+                        onChangeText={setPassword}
+                    />
+                    {password && (
+                        <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+                            <MaterialIcons name={showPassword ? "visibility" : "visibility-off"} size={24} color="#979797ff"/>
+                        </TouchableOpacity>
+                    )}
+                </View>
             </View>
 
             <TouchableOpacity>
@@ -57,17 +64,18 @@ export default function LoginScreen({navigation}) {
 const styles=StyleSheet.create({
     mainContainer: {
         flex: 1,
+        // justifyContent: 'center',
+        alignItems: 'center',
         margin: 0,
         padding: 0,
     },
 
     // Container Geral
     formContainer:{
-        flex: 1,
-        justifyContent: 'space-between',
-        alignItems: 'center',
         marginTop: 50,
-        marginBottom: 200,
+        alignItems: 'center',
+        width: '80%',
+        gap: 20,
     },
 
     // Titulo form
@@ -80,15 +88,29 @@ const styles=StyleSheet.create({
 
     // Parte de Inserir
     inputContainer:{
-        // justifyContent: 'center',
-        // alignItems: 'center',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+    },
+
+    inputText:{
+        marginBottom: 20,
+        fontSize: 20,
+    },
+
+    subContainerInput:{
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderWidth: 1,
+        borderColor: '#979797ff',
+        borderRadius: 50,
+        width: '100%',
+        justifyContent: 'space-between',
+        paddingHorizontal: 20,
     },
 
     input:{
-        borderWidth: 1,
-        borderColor: '#000',
-        borderRadius: 50,
-        width: 300,
+        width: '85%',
         height: 50,
     },
 
@@ -100,7 +122,7 @@ const styles=StyleSheet.create({
         borderWidth: 1,
         borderColor: '#000',
         borderRadius: 10,
-        width: 125,
+        width: 170,
         height: 45,
     },
 
@@ -108,7 +130,7 @@ const styles=StyleSheet.create({
         color: '#FFF',
         fontFamily: 'Varela',
         fontWeight: 'bold',
-        fontSize: 15,
+        fontSize: 23,
     },
 
 
@@ -120,4 +142,8 @@ const styles=StyleSheet.create({
         fontSize: 20,
         margin: 10,
     },
+
+    linkArea:{
+        alignItems: 'center', 
+    }
 })
