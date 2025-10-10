@@ -19,7 +19,24 @@ export default function LoginScreen({navigation}) {
                 ACESSE SEU PERFIL
             </Text>
 
-            <StylizedInput/>
+            <StylizedInput
+                title={"E-mail"}
+                placeholder={"exemplo@email.com"}
+                value={email}
+                onChangeText={setEmail}
+                onPress={() => setEmail('')}
+                icon={"cancel"}
+            />
+
+            <StylizedInput
+                title={"Senha"}
+                placeholder={"Password"}
+                value={password}
+                secureTextEntry={showPassword}
+                onChangeText={setPassword}
+                onPress={() => setShowPassword(!showPassword)}
+                icon={showPassword ? "visibility" : "visibility-off"}
+            />
 
             <View style={styles.inputContainer}>
                 <Text style={styles.inputText}>

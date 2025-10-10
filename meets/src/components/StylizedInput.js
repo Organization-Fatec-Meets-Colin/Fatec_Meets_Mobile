@@ -1,20 +1,21 @@
 import { SafeAreaViewBase, StyleSheet, Text, TextInput, Touchable, TouchableHighlight, TouchableOpacity, View } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-export default function StylizedInput({ value, onChangeText, placeholder, securityTextEntry, icon, onPress}) {
+export default function StylizedInput({ title, value, onChangeText, placeholder, securityTextEntry, icon, onPress}) {
+    
     return (
         <View style={styles.inputContainer}>
             <Text style={styles.inputText}>
-                E-mail:
+                {title}
             </Text>
             <View style={styles.subContainerInput}>
                 <TextInput
-                    placeholder="placeholder"
+                    style={styles.input}
+                    placeholder={placeholder}
                     value={value}
                     onChangeText={onChangeText}
                     secureTextEntry={securityTextEntry}
-                    style={styles.input}
-                    {...rest}
+                    // {...rest}
                 />
                 {value && (
                     <TouchableOpacity onPress={onPress}>
@@ -26,7 +27,7 @@ export default function StylizedInput({ value, onChangeText, placeholder, securi
     )
 }
 
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     // Parte de Inserir
     inputContainer:{
         justifyContent: 'center',
