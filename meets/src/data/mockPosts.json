@@ -1,0 +1,459 @@
+[
+    {
+        "id": 1,
+        "idUsuario": 101,
+        "usuario": {
+            "nome": "João Silva",
+            "username": "joao.silva",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=1"
+        },
+        "conteudo": "Acabei de voltar da Feira de Tecnologia 2025! Foi incrível ver tantas inovações em IA e desenvolvimento mobile. Quem mais esteve lá? 🚀",
+        "dataHora": "2025-11-02T14:30:00",
+        "postTime": "1 dia",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/600/400?random=1"
+            }
+        ],
+        "likes": 142,
+        "comentarios": [
+            {
+                "id": 1,
+                "idUsuario": 102,
+                "usuario": "maria.santos",
+                "conteudo": "Eu fui! A palestra sobre React Native foi sensacional!",
+                "dataHora": "2025-11-02T15:45:00"
+            },
+            {
+                "id": 2,
+                "idUsuario": 103,
+                "usuario": "pedro.lima",
+                "conteudo": "Queria ter ido... ano que vem não perco!",
+                "dataHora": "2025-11-02T16:20:00"
+            }
+        ],
+        "compartilhamentos": 12,
+        "isEvento": false
+    },
+    {
+        "id": 2,
+        "idUsuario": 102,
+        "usuario": {
+            "nome": "Maria Santos",
+            "username": "maria.santos",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=2"
+        },
+        "conteudo": "📅 EVENTO: Hackathon Fatec 2025\n\nQuando: 15-17 de Novembro\nOnde: Campus Fatec São Paulo\n\nInscrições abertas! Prêmios incríveis para os vencedores. Quem vai participar? 💻🏆",
+        "dataHora": "2025-11-01T10:00:00",
+        "postTime": "2 dias",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/800/600?random=2"
+            }
+        ],
+        "likes": 287,
+        "comentarios": [
+            {
+                "id": 3,
+                "idUsuario": 101,
+                "usuario": "joao.silva",
+                "conteudo": "Já me inscrevi! Vai ser épico!",
+                "dataHora": "2025-11-01T11:30:00"
+            },
+            {
+                "id": 4,
+                "idUsuario": 104,
+                "usuario": "ana.costa",
+                "conteudo": "Meu time já está formado! 🔥",
+                "dataHora": "2025-11-01T14:15:00"
+            },
+            {
+                "id": 5,
+                "idUsuario": 105,
+                "usuario": "carlos.mendes",
+                "conteudo": "Alguém precisa de mais um dev? Topo participar!",
+                "dataHora": "2025-11-02T09:00:00"
+            }
+        ],
+        "compartilhamentos": 45,
+        "isEvento": true,
+        "participantes": 87,
+        "evento": {
+            "titulo": "Hackathon Fatec 2025",
+            "dataInicio": "2025-11-15T08:00:00",
+            "dataFim": "2025-11-17T18:00:00",
+            "local": "Campus Fatec São Paulo",
+            "descricao": "Maior hackathon do ano com desafios de programação e inovação"
+        }
+    },
+    {
+        "id": 3,
+        "idUsuario": 103,
+        "usuario": {
+            "nome": "Pedro Lima",
+            "username": "pedro.lima",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=3"
+        },
+        "conteudo": "Finalmente terminei meu projeto de TCC! 6 meses de muito trabalho, mas valeu cada linha de código. Obrigado a todos que me ajudaram! 🎓💙",
+        "dataHora": "2025-11-03T08:15:00",
+        "postTime": "5 horas",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/700/500?random=3"
+            },
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/700/500?random=4"
+            }
+        ],
+        "likes": 456,
+        "comentarios": [
+            {
+                "id": 6,
+                "idUsuario": 102,
+                "usuario": "maria.santos",
+                "conteudo": "Parabéns! Seu projeto ficou incrível!",
+                "dataHora": "2025-11-03T08:45:00"
+            },
+            {
+                "id": 7,
+                "idUsuario": 106,
+                "usuario": "julia.fernandes",
+                "conteudo": "Merecido! Você se dedicou muito 👏",
+                "dataHora": "2025-11-03T09:30:00"
+            }
+        ],
+        "compartilhamentos": 23,
+        "isEvento": false
+    },
+    {
+        "id": 4,
+        "idUsuario": 104,
+        "usuario": {
+            "nome": "Ana Costa",
+            "username": "ana.costa",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=4"
+        },
+        "conteudo": "Dica rápida de React Native: Use o useMemo e useCallback para otimizar a performance da sua aplicação! Fez toda diferença no meu app. 📱⚡",
+        "dataHora": "2025-11-02T16:30:00",
+        "postTime": "21 horas",
+        "midia": [],
+        "likes": 189,
+        "comentarios": [
+            {
+                "id": 8,
+                "idUsuario": 107,
+                "usuario": "lucas.almeida",
+                "conteudo": "Muito útil! Estava precisando dessa dica",
+                "dataHora": "2025-11-02T17:00:00"
+            },
+            {
+                "id": 9,
+                "idUsuario": 108,
+                "usuario": "fernanda.rocha",
+                "conteudo": "Salvando esse post! Obrigada por compartilhar 💜",
+                "dataHora": "2025-11-02T18:15:00"
+            },
+            {
+                "id": 10,
+                "idUsuario": 103,
+                "usuario": "pedro.lima",
+                "conteudo": "useCallback salvou meu projeto! Ótima dica",
+                "dataHora": "2025-11-03T10:00:00"
+            }
+        ],
+        "compartilhamentos": 34,
+        "isEvento": false
+    },
+    {
+        "id": 5,
+        "idUsuario": 105,
+        "usuario": {
+            "nome": "Carlos Mendes",
+            "username": "carlos.mendes",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=5"
+        },
+        "conteudo": "🎉 EVENTO: Palestra sobre Cloud Computing\n\nPalestrante: Dr. Roberto Tavares\nData: 10/11/2025 às 19h\nLocal: Auditório Principal\n\nGratuito! Não percam! ☁️",
+        "dataHora": "2025-11-01T09:00:00",
+        "postTime": "2 dias",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/600/800?random=5"
+            }
+        ],
+        "likes": 203,
+        "comentarios": [
+            {
+                "id": 11,
+                "idUsuario": 101,
+                "usuario": "joao.silva",
+                "conteudo": "Já marquei na agenda!",
+                "dataHora": "2025-11-01T10:30:00"
+            }
+        ],
+        "compartilhamentos": 28,
+        "isEvento": true,
+        "participantes": 156,
+        "evento": {
+            "titulo": "Palestra sobre Cloud Computing",
+            "dataInicio": "2025-11-10T19:00:00",
+            "dataFim": "2025-11-10T21:00:00",
+            "local": "Auditório Principal - Fatec",
+            "descricao": "Palestra ministrada pelo Dr. Roberto Tavares sobre as tendências em Cloud Computing"
+        }
+    },
+    {
+        "id": 6,
+        "idUsuario": 106,
+        "usuario": {
+            "nome": "Julia Fernandes",
+            "username": "julia.fernandes",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=6"
+        },
+        "conteudo": "Quem mais está animado para o lançamento do novo framework? A comunidade está em polvorosa! 🔥",
+        "dataHora": "2025-11-03T07:00:00",
+        "postTime": "6 horas",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/500/500?random=6"
+            }
+        ],
+        "likes": 312,
+        "comentarios": [
+            {
+                "id": 12,
+                "idUsuario": 102,
+                "usuario": "maria.santos",
+                "conteudo": "Mal posso esperar! As features anunciadas são incríveis",
+                "dataHora": "2025-11-03T07:45:00"
+            },
+            {
+                "id": 13,
+                "idUsuario": 104,
+                "usuario": "ana.costa",
+                "conteudo": "Já comecei a estudar a documentação! 📚",
+                "dataHora": "2025-11-03T08:30:00"
+            },
+            {
+                "id": 14,
+                "idUsuario": 109,
+                "usuario": "rafael.santos",
+                "conteudo": "Vai revolucionar o desenvolvimento!",
+                "dataHora": "2025-11-03T11:15:00"
+            }
+        ],
+        "compartilhamentos": 67,
+        "isEvento": false
+    },
+    {
+        "id": 7,
+        "idUsuario": 107,
+        "usuario": {
+            "nome": "Lucas Almeida",
+            "username": "lucas.almeida",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=7"
+        },
+        "conteudo": "Alguém mais teve problemas com o build do Android hoje? Consegui resolver limpando o cache do Gradle. Espero que ajude! 🛠️",
+        "dataHora": "2025-11-03T11:00:00",
+        "postTime": "2 horas",
+        "midia": [],
+        "likes": 95,
+        "comentarios": [
+            {
+                "id": 15,
+                "idUsuario": 105,
+                "usuario": "carlos.mendes",
+                "conteudo": "Salvou meu dia! Obrigado!!!",
+                "dataHora": "2025-11-03T11:30:00"
+            },
+            {
+                "id": 16,
+                "idUsuario": 110,
+                "usuario": "beatriz.lima",
+                "conteudo": "Funcionou aqui também! Valeu demais 🙏",
+                "dataHora": "2025-11-03T12:00:00"
+            }
+        ],
+        "compartilhamentos": 15,
+        "isEvento": false
+    },
+    {
+        "id": 8,
+        "idUsuario": 108,
+        "usuario": {
+            "nome": "Fernanda Rocha",
+            "username": "fernanda.rocha",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=8"
+        },
+        "conteudo": "🎮 EVENTO: Game Jam Fatec\n\nCrie um jogo em 48 horas!\nData: 20-22/11/2025\nPrêmios para os 3 melhores jogos!\n\nInscrições até 15/11. Quem topa o desafio? 🕹️",
+        "dataHora": "2025-10-31T15:00:00",
+        "postTime": "3 dias",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/900/600?random=7"
+            },
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/900/600?random=8"
+            }
+        ],
+        "likes": 421,
+        "comentarios": [
+            {
+                "id": 17,
+                "idUsuario": 106,
+                "usuario": "julia.fernandes",
+                "conteudo": "Meu time já está pronto! Vamos arrasar! 🎯",
+                "dataHora": "2025-10-31T16:00:00"
+            },
+            {
+                "id": 18,
+                "idUsuario": 103,
+                "usuario": "pedro.lima",
+                "conteudo": "Primeira vez que vou participar, animado!",
+                "dataHora": "2025-11-01T08:00:00"
+            },
+            {
+                "id": 19,
+                "idUsuario": 107,
+                "usuario": "lucas.almeida",
+                "conteudo": "Alguém precisa de um programador Unity?",
+                "dataHora": "2025-11-01T14:30:00"
+            },
+            {
+                "id": 20,
+                "idUsuario": 109,
+                "usuario": "rafael.santos",
+                "conteudo": "Vou fazer um jogo mobile! Quem se junta?",
+                "dataHora": "2025-11-02T10:00:00"
+            }
+        ],
+        "compartilhamentos": 89,
+        "isEvento": true,
+        "participantes": 64,
+        "evento": {
+            "titulo": "Game Jam Fatec 2025",
+            "dataInicio": "2025-11-20T18:00:00",
+            "dataFim": "2025-11-22T18:00:00",
+            "local": "Laboratórios de Informática - Fatec",
+            "descricao": "Competição de desenvolvimento de jogos em 48 horas com prêmios incríveis"
+        }
+    },
+    {
+        "id": 9,
+        "idUsuario": 109,
+        "usuario": {
+            "nome": "Rafael Santos",
+            "username": "rafael.santos",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=9"
+        },
+        "conteudo": "Acabei de publicar meu primeiro app na Play Store! Depois de meses desenvolvendo, finalmente está no ar. Link na bio! 📲🎉",
+        "dataHora": "2025-11-02T20:00:00",
+        "postTime": "17 horas",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/400/800?random=9"
+            },
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/400/800?random=10"
+            },
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/400/800?random=11"
+            }
+        ],
+        "likes": 567,
+        "comentarios": [
+            {
+                "id": 21,
+                "idUsuario": 101,
+                "usuario": "joao.silva",
+                "conteudo": "Parabéns mano! Acabei de baixar, ficou top! 🔥",
+                "dataHora": "2025-11-02T20:30:00"
+            },
+            {
+                "id": 22,
+                "idUsuario": 104,
+                "usuario": "ana.costa",
+                "conteudo": "Que orgulho! Seu app é incrível! 💜",
+                "dataHora": "2025-11-02T21:15:00"
+            },
+            {
+                "id": 23,
+                "idUsuario": 108,
+                "usuario": "fernanda.rocha",
+                "conteudo": "Já instalei e avaliei 5 estrelas! Sucesso! ⭐",
+                "dataHora": "2025-11-03T08:00:00"
+            },
+            {
+                "id": 24,
+                "idUsuario": 110,
+                "usuario": "beatriz.lima",
+                "conteudo": "UI/UX ficou perfeita! Parabéns pelo trabalho!",
+                "dataHora": "2025-11-03T10:30:00"
+            }
+        ],
+        "compartilhamentos": 123,
+        "isEvento": false
+    },
+    {
+        "id": 10,
+        "idUsuario": 110,
+        "usuario": {
+            "nome": "Beatriz Lima",
+            "username": "beatriz.lima",
+            "fotoPerfil": "https://i.pravatar.cc/150?img=10"
+        },
+        "conteudo": "🚀 EVENTO: Workshop de Git e GitHub\n\nNível: Iniciante ao Avançado\nData: 08/11/2025 das 14h às 18h\nInstrutor: Prof. Marcelo Oliveira\n\nVagas limitadas! Inscreva-se já! 💻",
+        "dataHora": "2025-11-01T08:00:00",
+        "postTime": "2 dias",
+        "midia": [
+            {
+                "tipo": "imagem",
+                "url": "https://picsum.photos/700/400?random=12"
+            }
+        ],
+        "likes": 234,
+        "comentarios": [
+            {
+                "id": 25,
+                "idUsuario": 102,
+                "usuario": "maria.santos",
+                "conteudo": "Perfeito! Estava precisando reforçar Git",
+                "dataHora": "2025-11-01T09:00:00"
+            },
+            {
+                "id": 26,
+                "idUsuario": 107,
+                "usuario": "lucas.almeida",
+                "conteudo": "Já me inscrevi! O professor é ótimo! 👨‍🏫",
+                "dataHora": "2025-11-01T11:00:00"
+            },
+            {
+                "id": 27,
+                "idUsuario": 105,
+                "usuario": "carlos.mendes",
+                "conteudo": "Ainda tem vagas disponíveis?",
+                "dataHora": "2025-11-02T15:30:00"
+            }
+        ],
+        "compartilhamentos": 41,
+        "isEvento": true,
+        "participantes": 42,
+        "evento": {
+            "titulo": "Workshop de Git e GitHub",
+            "dataInicio": "2025-11-08T14:00:00",
+            "dataFim": "2025-11-08T18:00:00",
+            "local": "Laboratório 3 - Fatec",
+            "descricao": "Workshop completo sobre controle de versão com Git e colaboração no GitHub"
+        }
+    }
+]
