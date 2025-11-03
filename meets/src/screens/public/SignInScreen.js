@@ -1,23 +1,18 @@
 
 import { StatusBar } from "expo-status-bar";
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { SafeAreaViewBase, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import StylizedInput from "../../components/StylizedInput";
-import { AuthContext } from "../../../context/AuthContext";
 import StylizedButton from "../../components/StylizedButton";
 
-export default function LoginScreen({ navigation }) {
-    const { login } = useContext(AuthContext);
+export default function SignInScreen({ navigation }) {
+
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('')
+    const [confirmPassword, setConfirmPassword] = useState('')
     const [showPassword, setShowPassword] = useState(true);
-
-    function handleLogin() {
-        login('dummy-token');
-
-        navigation.navigate('Home');
-    }
 
     return (
         <View style={styles.mainContainer}>
@@ -25,8 +20,16 @@ export default function LoginScreen({ navigation }) {
 
             <View style={styles.formContainer}>
                 <Text style={styles.title}>
-                    ACESSE O SEU LOGIN
+                    FAÇA SEU CADASTRO
                 </Text>
+
+                <StylizedInput
+                    value={name}
+                    onchangeText={setName}
+                    placeholder="Nome de Usuário"
+                    keyboardType="default"
+                    autoCorrect={false}
+                />
 
                 <StylizedInput
                     value={email}
@@ -37,30 +40,41 @@ export default function LoginScreen({ navigation }) {
                     autoCorrect={false}
                 />
 
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        placeholder="Senha"
-                        secureTextEntry={showPassword}
-                        value={password}
-                        onChangeText={setPassword}
-                        style={styles.input}
-                    />
-                    {password && (
-                        <TouchableHighlight onPress={() => setShowPassword(!showPassword)} style={{ borderRadius: 100 }}>
-                            <MaterialIcons name={showPassword ? "visibility" : "visibility-off"} size={24} color="#979797ff" />
-                        </TouchableHighlight>
-                    )}
-                </View>
+                <StylizedInput
+                    value={password}
+                    onchangeText={setPassword}
+                    placeholder="Senha"
+                    keyboardType="default"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={showPassword}
+                    icon={showPassword ? "visibility" : "visibility-off"}
+                    isPassword={true}
+                    onPressIcon={() => setShowPassword(!showPassword)}
+                />
+
+                <StylizedInput
+                    value={confirmPassword}
+                    onchangeText={setConfirmPassword}
+                    placeholder="Confirmar Senha"
+                    keyboardType="default"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={showPassword}
+                    icon={showPassword ? "visibility" : "visibility-off"}
+                    isPassword={true}
+                    onPressIcon={() => setShowPassword(!showPassword)}
+                />
 
                 <View style={styles.container}>
                     <StylizedButton
-                        onPress={handleLogin}
-                        title="Entrar"
+                        onPress={() => console.log('Criar Conta')}
+                        title="Criar Conta"
                     />
 
                     <StylizedButton
-                        onPress={() => navigation.popTo('SignIn')}
-                        title="Criar Conta"
+                        onPress={() => navigation.popTo('Login')}
+                        title="Fazer Login"
                         style="secondary"
                     />
 
