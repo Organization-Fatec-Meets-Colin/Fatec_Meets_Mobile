@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Post from "../../components/Post";
 import mockPosts from "../../data/mockPosts.json";
 
+//added comment
 
 export default function FeedScreen() {
     const [postData, setPostData] = useState([]);
