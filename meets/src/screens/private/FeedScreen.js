@@ -9,7 +9,7 @@ import mockPosts from "../../data/mockPosts.json";
 
 //added comment
 
-export default function FeedScreen() {
+export default function FeedScreen({ navigation }) {
     const [postData, setPostData] = useState([]);
 
     useEffect(() => {
@@ -19,6 +19,14 @@ export default function FeedScreen() {
         }
         getPosts();
     }, []);
+
+    const handlePostPress = (post) => {
+        navigation.navigate('PostDetails', { post });
+
+        console.log('Post pressionado:', post);
+        // Aqui você pode navegar para uma tela de detalhes do post, por exemplo:
+        // navigation.navigate('PostDetails', { post });
+    };
 
     return (
         <View style={styles.safeArea}>
@@ -32,7 +40,7 @@ export default function FeedScreen() {
                     {/* Feed content goes here */}
 
                     {postData ? postData.map((post) => (
-                        <Post key={post.id} post={post} />
+                        <Post key={post.id} post={post} onPress={() => handlePostPress(post)} />
                     )) : null}
                 </View>
             </ScrollView>
