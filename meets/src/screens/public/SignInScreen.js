@@ -1,18 +1,61 @@
 
 import { StatusBar } from "expo-status-bar";
-import { useState } from "react";
-import { SafeAreaViewBase, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { useContext, useState } from "react";
+import { SafeAreaViewBase, StyleSheet, Text, TextInput, TouchableHighlight, View, Alert, ActivityIndicator } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import StylizedInput from "../../components/StylizedInput";
 import StylizedButton from "../../components/StylizedButton";
+import { AuthContext } from "../../../context/AuthContext";
 
 export default function SignInScreen({ navigation }) {
+    const { register, authIsLoading, error } = useContext(AuthContext);
 
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('')
-    const [confirmPassword, setConfirmPassword] = useState('')
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(true);
+
+    async function handleSignIn() {
+        // Validações
+        if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
+            Alert.alert('Erro', 'Por favor, preencha todos os campos');
+            return;
+        }
+
+        if (!email.includes('@')) {
+            Alert.alert('Erro', 'Por favor, insira um e-mail válido');
+            return;
+        }
+
+        if (password.length < 6) {
+            Alert.alert('Erro', 'A senha deve ter no mínimo 6 caracteres');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Erro', 'As senhas não coincidem');
+            return;
+        }
+
+        // Registrar usando o service
+        const result = await register(name.trim(), email.trim(), password);
+
+        if (result.success) {
+            Alert.alert(
+                'Sucesso!',
+                'Conta criada com sucesso!',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => navigation.navigate('Home')
+                    }
+                ]
+            );
+        } else {
+            Alert.alert('Erro ao Criar Conta', result.error || 'Não foi possível criar a conta');
+        }
+    }
 
     return (
         <View style={styles.mainContainer}>
@@ -67,24 +110,37 @@ export default function SignInScreen({ navigation }) {
                 />
 
                 <View style={styles.container}>
-                    <StylizedButton
-                        onPress={() => console.log('Criar Conta')}
-                        title="Criar Conta"
-                    />
+                    {authIsLoading ? (
+                        <ActivityIndicator size="large" color="#9C2222" />
+                    ) : (
+                        <>
+                            <StylizedButton
+                                onPress={handleSignIn}
+                                title="Criar Conta"
+                                disabled={authIsLoading}
+                            />
 
-                    <StylizedButton
-                        onPress={() => navigation.popTo('Login')}
-                        title="Fazer Login"
-                        style="secondary"
-                    />
+                            <StylizedButton
+                                onPress={() => navigation.popTo('Login')}
+                                title="Fazer Login"
+                                style="secondary"
+                                disabled={authIsLoading}
+                            />
 
-                    <StylizedButton
-                        onPress={() => console.log('Recuperar Senha')}
-                        title="Recuperar Senha"
-                        style="link"
-                    />
+                            <StylizedButton
+                                onPress={() => console.log('Recuperar Senha')}
+                                title="Recuperar Senha"
+                                style="link"
+                                disabled={authIsLoading}
+                            />
+                        </>
+                    )}
 
                 </View>
+
+                {error && (
+                    <Text style={styles.errorText}>{error}</Text>
+                )}
 
             </View>
         </View>
@@ -173,4 +229,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
+    errorText: {
+        color: '#FF0000',
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 10
+    }
 })
