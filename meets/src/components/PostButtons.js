@@ -2,16 +2,29 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useState } from "react";
 
-export default function PostButtons({ initialLikes = 0, comments = 0, isEvent = false, presenceInitial = 0 }) {
-    const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(initialLikes);
+export default function PostButtons({
+    initialLikes = [],
+    comments = [],
+    isEvent = false,
+    presenceInitial = 0,
+    onLikePress,
+    currentUserId
+}) {
+    const userLiked = initialLikes.some(user => user.id === currentUserId);
+    const [liked, setLiked] = useState(userLiked);
+    const [likeCount, setLikeCount] = useState(initialLikes.length);
     const [comentsCount, setComentsCount] = useState(0);
     const [presence, setPresence] = useState(false);
     const [presenceCount, setPresenceCount] = useState(presenceInitial);
 
     const handleLike = () => {
-        setLiked(!liked);
-        setLikeCount(liked ? likeCount - 1 : likeCount + 1);
+        const newLikedState = !liked;
+        setLiked(newLikedState);
+        setLikeCount(newLikedState ? likeCount + 1 : likeCount - 1);
+
+        if (onLikePress) {
+            onLikePress(newLikedState);
+        }
     };
 
     const handleComents = () => {
@@ -55,7 +68,7 @@ export default function PostButtons({ initialLikes = 0, comments = 0, isEvent = 
                         color="#666"
                     />
                     <Text style={styles.statsCount}>
-                        {comments.length}
+                        {Array.isArray(comments) ? comments.length : 0}
                     </Text>
                 </TouchableOpacity>
             </View>

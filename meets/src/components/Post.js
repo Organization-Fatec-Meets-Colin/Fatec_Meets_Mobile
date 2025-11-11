@@ -4,30 +4,48 @@ import { ScrollView } from "react-native-gesture-handler";
 import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Material from '@expo/vector-icons/MaterialCommunityIcons';
-import { useState } from "react";
+import { useState, useContext } from "react";
 import PostButtons from "./PostButtons";
+import { getTimeAgo } from "../utils/dateUtils";
+import { addLike, removeLike } from "../service/postagemService";
+import { AuthContext } from "../../context/AuthContext";
 
 export default function Post({ post, onPress }) {
+    const { user } = useContext(AuthContext);
 
     const [postData, setPostData] = useState({
         id: post.id,
-        username: post.usuario.username,
+        username: post.usuario.nome,
         userImage: post.usuario.fotoPerfil,
         content: post.conteudo,
-        postTime: post.postTime,
-        midia: post.midia,
+        postTime: getTimeAgo(post.dataCriacao),
+        midia: post.imagens || [],
 
-        likes: post.likes || 0,
-        comments: post.comentarios || null,
+        likes: post.likes || [],
+        totalLikes: post.likes ? post.likes.length : 0,
+        comments: post.comentarios || [],
         shares: post.compartilhamentos || 0,
 
-        isEvent: post.isEvento || false,
+        isEvent: post.evento != null,
+        evento: post.evento,
         participantes: post.participantes || 0,
     });
 
     const handlePostPress = () => {
         if (onPress) {
             onPress(postData);
+        }
+    };
+
+    const handleLikePress = async (isLiked) => {
+        try {
+            if (isLiked) {
+                await addLike(postData.id, user.id);
+            } else {
+                await removeLike(postData.id, user.id);
+            }
+        } catch (error) {
+            console.error('Erro ao processar like:', error);
         }
     };
 
@@ -70,25 +88,29 @@ export default function Post({ post, onPress }) {
                     showsHorizontalScrollIndicator={false}
                     style={styles.postImageContainer}>
                     <View style={[styles.postImageWrapper]}>
-                        {postData.midia.length > 0 ? postData.midia.map((midia, index) => {
-                            if (midia.tipo === 'imagem') {
-                                return (
-                                    <Image
-                                        key={index}
-                                        style={styles.postImage}
-                                        source={{
-                                            uri: midia.url,
-                                        }}
-                                    />
-                                )
-                            }
-
-                        }) : null}
+                        {postData.midia.map((imagem, index) => (
+                            <Image
+                                key={imagem.id || index}
+                                style={styles.postImage}
+                                source={{
+                                    uri: imagem.url,
+                                }}
+                                contentFit="cover"
+                                transition={300}
+                            />
+                        ))}
                     </View>
                 </ScrollView>}
 
                 <View style={styles.postData}>
-                    <PostButtons initialLikes={postData.likes} comments={postData.comments} isEvent={postData.isEvent} presenceInitial={postData.participantes} />
+                    <PostButtons
+                        initialLikes={postData.likes}
+                        comments={postData.comments}
+                        isEvent={postData.isEvent}
+                        presenceInitial={postData.participantes}
+                        onLikePress={handleLikePress}
+                        currentUserId={user?.id}
+                    />
                 </View>
             </View>
         </View>

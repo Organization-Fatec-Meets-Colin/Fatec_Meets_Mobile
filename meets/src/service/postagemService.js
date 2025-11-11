@@ -29,3 +29,19 @@ export const deletePostagem = async (id) => {
     const response = await meetsApi.delete(`/api/postagens/${id}`);
     return response.data;
 };
+
+// Adicionar like em uma postagem
+export const addLike = async (postagemId, usuarioId) => {
+    const response = await meetsApi.post(`/api/postagens/${postagemId}/like`, null, {
+        params: { usuarioId }
+    });
+    return response.data;
+};
+
+// Remover like de uma postagem
+export const removeLike = async (postagemId, usuarioId) => {
+    const response = await meetsApi.delete(`/api/postagens/${postagemId}/like`, {
+        params: { usuarioId }
+    });
+    return response.data;
+};

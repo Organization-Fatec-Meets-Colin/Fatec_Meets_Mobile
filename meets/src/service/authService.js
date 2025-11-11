@@ -2,9 +2,9 @@ import { meetsApi } from '../libs/api';
 
 // Login de usuário
 export const login = async (email, senha) => {
-    const response = await meetsApi.post('/api/auth/login', { 
-        email, 
-        senha 
+    const response = await meetsApi.post('/api/auth/login', {
+        email,
+        senha
     });
     return response.data;
 };

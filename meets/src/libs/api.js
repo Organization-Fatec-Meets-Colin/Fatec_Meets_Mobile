@@ -9,6 +9,7 @@ class AppError extends Error {
 
 // Base URL da API - ajuste conforme necessário
 const API_BASE_URL = 'https://9xpzx34n-8080.brs.devtunnels.ms/';
+// const API_BASE_URL = 'https://9xpzx34n-8080.brs.devtunnels.ms/'; // DevTunnel
 // Para produção: 'https://api.fatecmeets.com.br'
 
 export const meetsApi = axios.create({
