@@ -37,11 +37,11 @@ export const usePosts = ({ usuarioId = null, apenasEventos = false, autoLoad = t
             }
 
             // Ordenar por data de criação (mais recente primeiro)
-            // filteredPosts.sort((a, b) => {
-            //     const dateA = new Date(a.dataCriacao);
-            //     const dateB = new Date(b.dataCriacao);
-            //     return dateB - dateA;
-            // });
+            filteredPosts.sort((a, b) => {
+                const dateA = new Date(a.dataCriacao);
+                const dateB = new Date(b.dataCriacao);
+                return dateB - dateA;
+            });
 
             setPosts(filteredPosts);
         } catch (err) {

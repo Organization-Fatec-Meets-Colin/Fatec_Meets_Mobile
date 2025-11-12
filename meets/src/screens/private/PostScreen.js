@@ -10,7 +10,6 @@ import { getTimeAgo } from "../../utils/dateUtils";
 import { addLike, removeLike, getPostagemById } from "../../service/postagemService";
 import { participarEvento, cancelarParticipacao } from "../../service/eventoService";
 import { AuthContext } from "../../../context/AuthContext";
-import { getImageUrl } from "../../libs/api";
 
 export default function PostScreen({ route, navigation }) {
     const { user } = useContext(AuthContext);

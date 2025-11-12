@@ -10,7 +10,6 @@ import { getTimeAgo } from "../utils/dateUtils";
 import { addLike, removeLike } from "../service/postagemService";
 import { AuthContext } from "../../context/AuthContext";
 import { cancelarParticipacao, participarEvento } from "../service";
-import { getImageUrl } from "../libs/api";
 
 export default function Post({ post, onPress }) {
     const { user } = useContext(AuthContext);
@@ -126,7 +125,7 @@ export default function Post({ post, onPress }) {
                                 key={imagem.id || index}
                                 style={styles.postImage}
                                 source={{
-                                    uri: getImageUrl(imagem.url),
+                                    uri: imagem.url,
                                 }}
                                 contentFit="cover"
                                 transition={300}
