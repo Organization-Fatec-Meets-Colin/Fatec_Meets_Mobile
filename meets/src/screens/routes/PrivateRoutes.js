@@ -5,6 +5,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import PostScreen from "../private/PostScreen";
 import ProfileScreen from "../private/UserScreen";
+import CreatePostScreen from "../private/CreatePostScreen";
 
 const Tabs = createBottomTabNavigator();
 const Stacks = createNativeStackNavigator();
@@ -84,6 +85,14 @@ function FeedStack() {
                     headerBackTitleVisible: false,
                     headerTintColor: '#9C2222',
                     headerTransparent: true,
+                }}
+            />
+            <Stacks.Screen
+                name="CreatePost"
+                component={CreatePostScreen}
+                options={{
+                    headerShown: false,
+                    presentation: 'modal',
                 }}
             />
         </Stacks.Navigator>

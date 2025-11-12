@@ -9,9 +9,16 @@ import PostButtons from "./PostButtons";
 import { getTimeAgo } from "../utils/dateUtils";
 import { addLike, removeLike } from "../service/postagemService";
 import { AuthContext } from "../../context/AuthContext";
+import { cancelarParticipacao, participarEvento } from "../service";
+import { getImageUrl } from "../libs/api";
 
 export default function Post({ post, onPress }) {
     const { user } = useContext(AuthContext);
+
+    // Debug: Log das imagens
+    if (post.imagens && post.imagens.length > 0) {
+        console.log('📸 Post', post.id, 'tem', post.imagens.length, 'imagem(ns):', post.imagens.map(img => img.url));
+    }
 
     const [postData, setPostData] = useState({
         id: post.id,
@@ -28,17 +35,22 @@ export default function Post({ post, onPress }) {
 
         isEvent: post.evento != null,
         evento: post.evento,
-        participantes: post.participantes || 0,
     });
 
     const handlePostPress = () => {
         if (onPress) {
+            console.log("Post pressed:", post);
             onPress(postData);
         }
     };
 
     const handleLikePress = async (isLiked) => {
         try {
+            if (!user || !user.id) {
+                console.error('Usuário não autenticado');
+                return;
+            }
+
             if (isLiked) {
                 await addLike(postData.id, user.id);
             } else {
@@ -46,6 +58,27 @@ export default function Post({ post, onPress }) {
             }
         } catch (error) {
             console.error('Erro ao processar like:', error);
+        }
+    };
+
+    const handlePresencePress = async (isPresent) => {
+        try {
+            // Lógica para adicionar/remover presença no evento
+
+            if (!user || !user.id) {
+                console.error('Usuário não autenticado');
+                return;
+            }
+
+            if (isPresent) {
+                await participarEvento(postData.evento.id, user.id);
+            } else {
+                // Chamar serviço para remover presença
+                await cancelarParticipacao(postData.evento.id, user.id);
+            }
+
+        } catch (error) {
+            console.error('Erro ao processar presença:', error);
         }
     };
 
@@ -93,7 +126,7 @@ export default function Post({ post, onPress }) {
                                 key={imagem.id || index}
                                 style={styles.postImage}
                                 source={{
-                                    uri: imagem.url,
+                                    uri: getImageUrl(imagem.url),
                                 }}
                                 contentFit="cover"
                                 transition={300}
@@ -107,8 +140,9 @@ export default function Post({ post, onPress }) {
                         initialLikes={postData.likes}
                         comments={postData.comments}
                         isEvent={postData.isEvent}
-                        presenceInitial={postData.participantes}
+                        presenceInitial={postData.evento?.participantes}
                         onLikePress={handleLikePress}
+                        onPresencePress={handlePresencePress}
                         currentUserId={user?.id}
                     />
                 </View>

@@ -43,7 +43,6 @@ export const usePosts = ({ usuarioId = null, apenasEventos = false, autoLoad = t
             //     return dateB - dateA;
             // });
 
-            console.log('Total de posts:', filteredPosts);
             setPosts(filteredPosts);
         } catch (err) {
             console.error('Erro ao buscar posts:', err);

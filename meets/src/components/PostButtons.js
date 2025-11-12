@@ -6,17 +6,18 @@ export default function PostButtons({
     initialLikes = [],
     comments = [],
     isEvent = false,
-    presenceInitial = 0,
+    presenceInitial = [],
     onLikePress,
+    onPresencePress,
     currentUserId
 }) {
     const userLiked = initialLikes.some(user => user.id === currentUserId);
+    const userPresence = presenceInitial.some(user => user.id === currentUserId);
     const [liked, setLiked] = useState(userLiked);
     const [likeCount, setLikeCount] = useState(initialLikes.length);
     const [comentsCount, setComentsCount] = useState(0);
-    const [presence, setPresence] = useState(false);
-    const [presenceCount, setPresenceCount] = useState(presenceInitial);
-
+    const [presence, setPresence] = useState(userPresence);
+    const [presenceCount, setPresenceCount] = useState(presenceInitial.length);
     const handleLike = () => {
         const newLikedState = !liked;
         setLiked(newLikedState);
@@ -38,6 +39,10 @@ export default function PostButtons({
     const handlePresence = () => {
         setPresence(!presence);
         setPresenceCount(presence ? presenceCount - 1 : presenceCount + 1);
+
+        if (onPresencePress) {
+            onPresencePress(!presence);
+        }
     }
 
     return (

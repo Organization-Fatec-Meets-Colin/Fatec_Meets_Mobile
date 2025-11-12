@@ -1,11 +1,13 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View, ActivityIndicator, RefreshControl } from "react-native";
-import { ScrollView } from "react-native-gesture-handler";
-import { useState } from "react";
+import { StyleSheet, Text, View, ActivityIndicator, RefreshControl, ScrollView, TouchableOpacity, Dimensions } from "react-native";
+import { useState, useContext } from "react";
+import { Image } from 'expo-image';
 import Post from "../../components/Post";
 import { usePosts } from "../../hooks/usePosts";
+import { AuthContext } from "../../../context/AuthContext";
 
 export default function FeedScreen({ navigation }) {
+    const { user } = useContext(AuthContext);
     const { posts, loading, error, refresh } = usePosts();
     const [refreshing, setRefreshing] = useState(false);
 
@@ -37,6 +39,25 @@ export default function FeedScreen({ navigation }) {
                     <Text style={styles.title}>meets</Text>
                 </View>
 
+                {/* Botão de Criar Post */}
+                <TouchableOpacity 
+                    style={styles.createPostButton}
+                    onPress={() => navigation.navigate('CreatePost')}
+                    activeOpacity={0.7}
+                >
+                    <View style={styles.userImageContainer}>
+                        <Image
+                            style={styles.userImage}
+                            source={{
+                                uri: user?.fotoPerfil || 'https://via.placeholder.com/150',
+                            }}
+                            contentFit="cover"
+                            transition={300}
+                        />
+                    </View>
+                    <Text style={styles.createPostPlaceholder}>Quais as novidades?</Text>
+                </TouchableOpacity>
+
                 <View style={styles.feedContainer}>
                     {loading && !refreshing && (
                         <ActivityIndicator size="large" color="#9C2222" style={styles.loader} />
@@ -49,14 +70,14 @@ export default function FeedScreen({ navigation }) {
                         </View>
                     )}
 
-                    {!loading && !error && posts.length === 0 && (
+                    {!loading && !error && posts && posts.length === 0 && (
                         <View style={styles.emptyContainer}>
                             <Text style={styles.emptyText}>Nenhum post encontrado</Text>
                             <Text style={styles.emptySubtext}>Seja o primeiro a postar! 🚀</Text>
                         </View>
                     )}
 
-                    {posts.map((post) => (
+                    {posts && posts.map((post) => (
                         <Post key={post.id} post={post} onPress={() => handlePostPress(post)} />
                     ))}
                 </View>
@@ -128,5 +149,36 @@ const styles = StyleSheet.create({
     emptySubtext: {
         fontSize: 16,
         color: '#666',
+    },
+    createPostButton: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderWidth: 1,
+        borderColor: '#B7B7B7',
+        borderRadius: 100,
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+        marginBottom: 20,
+    },
+    userImageContainer: {
+        width: Dimensions.get("window").width * 0.1,
+        height: Dimensions.get("window").width * 0.1,
+        borderRadius: 100,
+        borderWidth: 1,
+        borderColor: '#B7B7B7',
+        padding: 2,
+        overflow: 'hidden',
+        marginRight: 12,
+    },
+    userImage: {
+        borderRadius: 100,
+        width: '100%',
+        height: '100%',
+    },
+    createPostPlaceholder: {
+        flex: 1,
+        fontSize: 16,
+        color: '#979797',
     },
 })

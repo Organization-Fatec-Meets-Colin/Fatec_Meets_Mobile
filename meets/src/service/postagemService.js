@@ -13,8 +13,14 @@ export const getPostagemById = async (id) => {
 };
 
 // Criar nova postagem
-export const createPostagem = async (postagem) => {
-    const response = await meetsApi.post('/api/postagens', postagem);
+export const createPostagem = async (postagem, hasImages = false) => {
+    const config = hasImages ? {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    } : {};
+    
+    const response = await meetsApi.post('/api/postagens', postagem, config);
     return response.data;
 };
 
