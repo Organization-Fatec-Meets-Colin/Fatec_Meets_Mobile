@@ -1,33 +1,61 @@
 import { StatusBar } from "expo-status-bar";
-import { Dimensions, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Pressable } from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
 import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import Material from '@expo/vector-icons/MaterialCommunityIcons';
-import { useState } from "react";
+import { useState, useContext } from "react";
+import PostButtons from "./PostButtons";
+import { getTimeAgo } from "../utils/dateUtils";
+import { addLike, removeLike } from "../service/postagemService";
+import { AuthContext } from "../../context/AuthContext";
 
-export default function Post({ post }) {
+export default function Post({ post, onPress }) {
+    const { user } = useContext(AuthContext);
 
     const [postData, setPostData] = useState({
         id: post.id,
-        username: post.usuario.username,
+        username: post.usuario.nome,
         userImage: post.usuario.fotoPerfil,
         content: post.conteudo,
-        postTime: post.postTime,
-        midia: post.midia,
+        postTime: getTimeAgo(post.dataCriacao),
+        midia: post.imagens || [],
 
-        likes: post.likes || 0,
-        comments: post.comentarios || null,
+        likes: post.likes || [],
+        totalLikes: post.likes ? post.likes.length : 0,
+        comments: post.comentarios || [],
         shares: post.compartilhamentos || 0,
 
-        isEvent: post.isEvento || false,
+        isEvent: post.evento != null,
+        evento: post.evento,
         participantes: post.participantes || 0,
     });
 
+    const handlePostPress = () => {
+        if (onPress) {
+            onPress(postData);
+        }
+    };
+
+    const handleLikePress = async (isLiked) => {
+        try {
+            if (isLiked) {
+                await addLike(postData.id, user.id);
+            } else {
+                await removeLike(postData.id, user.id);
+            }
+        } catch (error) {
+            console.error('Erro ao processar like:', error);
+        }
+    };
 
     return (
-        <View style={[styles.postContainer, postData.isEvent && { borderColor: '#D88D8D'}]}>
-            <View style={styles.postHeader}>
+        <View style={[styles.postContainer, postData.isEvent && { borderColor: '#D88D8D' }]}>
+            <TouchableOpacity
+                activeOpacity={0.7}
+                onPress={handlePostPress}
+                style={styles.postHeader}
+            >
                 <View style={styles.userImageContainer}>
                     <Image
                         style={styles.userImage}
@@ -38,149 +66,55 @@ export default function Post({ post }) {
                         transition={300}
                     />
                 </View>
-            </View>
+            </TouchableOpacity>
             <View style={styles.postBody}>
-                <View style={styles.userData}>
-                    <Text style={styles.username}>{postData.username}</Text>
-                    <Text style={styles.postTime}> • {postData.postTime}</Text>
-                </View>
-                <View style={styles.postContent}>
-                    <Text>
-                        {postData.content}
-                    </Text>
-                </View>
+                <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={handlePostPress}
+                >
+                    <View style={styles.userData}>
+                        <Text style={styles.username}>{postData.username}</Text>
+                        <Text style={styles.postTime}> • {postData.postTime}</Text>
+                    </View>
+                    <View style={styles.postContent}>
+                        <Text>
+                            {postData.content}
+                        </Text>
+                    </View>
+                </TouchableOpacity>
 
-                {postData.midia && postData.midia.length > 0 && <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}
+                {postData.midia && postData.midia.length > 0 && <ScrollView
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
                     style={styles.postImageContainer}>
                     <View style={[styles.postImageWrapper]}>
-                        {postData.midia.length > 0 ? postData.midia.map((midia, index) => {
-                            if (midia.tipo === 'imagem') {
-                                return (
-                                    <Image
-                                        key={index}
-                                        style={styles.postImage}
-                                        source={{
-                                            uri: midia.url,
-                                        }}
-                                    />
-                                )
-                            }
-
-                        }) : null}
+                        {postData.midia.map((imagem, index) => (
+                            <Image
+                                key={imagem.id || index}
+                                style={styles.postImage}
+                                source={{
+                                    uri: imagem.url,
+                                }}
+                                contentFit="cover"
+                                transition={300}
+                            />
+                        ))}
                     </View>
                 </ScrollView>}
 
                 <View style={styles.postData}>
-                    <PostButtons initialLikes={postData.likes} comments={postData.comments} isEvent={postData.isEvent} presenceInitial={postData.participantes} />
+                    <PostButtons
+                        initialLikes={postData.likes}
+                        comments={postData.comments}
+                        isEvent={postData.isEvent}
+                        presenceInitial={postData.participantes}
+                        onLikePress={handleLikePress}
+                        currentUserId={user?.id}
+                    />
                 </View>
             </View>
         </View>
     )
-}
-
-function PostButtons({ initialLikes = 0, comments = 0, isEvent = false, presenceInitial = 0 }) {
-    const [liked, setLiked] = useState(false);
-    const [likeCount, setLikeCount] = useState(initialLikes);
-    const [comentsCount, setComentsCount] = useState(0);
-    const [presence, setPresence] = useState(false);
-    const [presenceCount, setPresenceCount] = useState(presenceInitial);
-
-    const handleLike = () => {
-        setLiked(!liked);
-        setLikeCount(liked ? likeCount - 1 : likeCount + 1);
-    };
-
-    const handleComents = () => {
-        console.log("Coment function");
-    }
-
-    const handleShare = () => {
-        console.log("Share function");
-    }
-
-    const handlePresence = () => {
-        setPresence(!presence);
-        setPresenceCount(presence ? presenceCount - 1 : presenceCount + 1);
-    }
-
-    return (
-        <View style={styles.postButtonsContainer}>
-
-            <View style={styles.postLikeContainer}>
-                <TouchableOpacity
-                    onPress={handleLike}
-                    style={styles.postButton}
-                >
-                    <FontAwesome
-                        name={liked ? "heart" : "heart-o"}
-                        size={15}
-                        color={liked ? "#9C2222" : "#666"}
-                    />
-                    <Text style={[styles.statsCount, liked && styles.likeCountActive]}>
-                        {likeCount}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.postCommentContainer}>
-                <TouchableOpacity
-                    onPress={handleComents}
-                    style={styles.postButton}
-                >
-                    <FontAwesome
-                        name="comment-o"
-                        size={15}
-                        color="#666"
-                    />
-                    <Text style={styles.statsCount}>
-                        {comments.length}
-                    </Text>
-                </TouchableOpacity>
-            </View>
-            <View style={styles.postShareContainer}>
-                <TouchableOpacity
-                    onPress={handleShare}
-                    style={styles.postButton}
-                >
-                    <FontAwesome
-                        name="send-o"
-                        size={15}
-                        color="#666"
-                    />
-                </TouchableOpacity>
-            </View>
-            {isEvent &&
-                <View style={styles.postPresenceContainer}>
-                    <TouchableOpacity
-                        onPress={handlePresence}
-                        style={[presence ?
-                            styles.postButton
-                            : {
-                                backgroundColor: '#9C2222',
-                                borderRadius: 100,
-                                paddingVertical: 5,
-                                paddingHorizontal: 20,
-                                width: '100%',
-                                transition: 'all 0.3s',
-                            }]}
-                    >
-                        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
-                            {presence ?
-                                <FontAwesome
-                                    name="check"
-                                    size={15}
-                                    color="#9C2222"
-                                /> :
-                                <Text style={[styles.txtBtnPrimary, { color: '#fff' }]}>Participar</Text>
-
-                            }
-
-                            <Text style={[styles.txtBtnPrimary, { color: presence ? '#9C2222' : '#fff' }]}>{presenceCount}</Text>
-                        </View>
-                    </TouchableOpacity>
-                </View>}
-
-        </View>
-    );
 }
 
 const styles = StyleSheet.create({
@@ -260,39 +194,5 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         flexDirection: 'row',
         gap: 10,
-    },
-    postButtonsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-    },
-    postButton: {
-        paddingVertical: 5,
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 5,
-        paddingHorizontal: 10,
-    },
-    statsCount: {
-        fontSize: 16,
-        color: '#666',
-        fontWeight: '500',
-    },
-    likeCountActive: {
-        color: '#9C2222',
-        fontWeight: 'bold',
-    },
-
-    btnPrimary: {
-        borderColor: '#9C2222',
-        borderRadius: 100,
-        paddingVertical: 5,
-        paddingHorizontal: 10,
-    },
-    txtBtnPrimary: {
-        color: '#fff',
-        fontSize: 12,
-        fontWeight: 'bold',
-        textAlign: 'center'
     },
 })

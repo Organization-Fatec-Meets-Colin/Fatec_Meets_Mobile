@@ -1,22 +1,39 @@
 
 import { StatusBar } from "expo-status-bar";
 import { useContext, useState } from "react";
-import { SafeAreaViewBase, StyleSheet, Text, TextInput, TouchableHighlight, View } from "react-native";
+import { SafeAreaViewBase, StyleSheet, Text, TextInput, TouchableHighlight, View, Alert, ActivityIndicator } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import StylizedInput from "../../components/StylizedInput";
 import { AuthContext } from "../../../context/AuthContext";
 import StylizedButton from "../../components/StylizedButton";
 
 export default function LoginScreen({ navigation }) {
-    const { login } = useContext(AuthContext);
+    const { login, authIsLoading, error } = useContext(AuthContext);
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('')
+    const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(true);
 
-    function handleLogin() {
-        login('dummy-token');
+    async function handleLogin() {
+        // Validações básicas
+        if (!email.trim() || !password.trim()) {
+            Alert.alert('Erro', 'Por favor, preencha todos os campos');
+            return;
+        }
 
-        navigation.navigate('Home');
+        if (!email.includes('@')) {
+            Alert.alert('Erro', 'Por favor, insira um e-mail válido');
+            return;
+        }
+
+        // Fazer login usando o service
+        const result = await login(email.trim(), password);
+
+        if (result.success) {
+            Alert.alert('Sucesso', `Bem-vindo, ${result.user.nome}!`);
+            navigation.navigate('Home');
+        } else {
+            Alert.alert('Erro no Login', result.error || 'Email ou senha inválidos');
+        }
     }
 
     return (
@@ -43,6 +60,7 @@ export default function LoginScreen({ navigation }) {
                         secureTextEntry={showPassword}
                         value={password}
                         onChangeText={setPassword}
+                        autoCapitalize="none"
                         style={styles.input}
                     />
                     {password && (
@@ -52,24 +70,36 @@ export default function LoginScreen({ navigation }) {
                     )}
                 </View>
 
+                {error && (
+                    <Text style={styles.errorText}>{error}</Text>
+                )}
+
                 <View style={styles.container}>
-                    <StylizedButton
-                        onPress={handleLogin}
-                        title="Entrar"
-                    />
+                    {authIsLoading ? (
+                        <ActivityIndicator size="large" color="#9C2222" />
+                    ) : (
+                        <>
+                            <StylizedButton
+                                onPress={handleLogin}
+                                title="Entrar"
+                                disabled={authIsLoading}
+                            />
 
-                    <StylizedButton
-                        onPress={() => navigation.popTo('SignIn')}
-                        title="Criar Conta"
-                        style="secondary"
-                    />
+                            <StylizedButton
+                                onPress={() => navigation.popTo('SignIn')}
+                                title="Criar Conta"
+                                style="secondary"
+                                disabled={authIsLoading}
+                            />
 
-                    <StylizedButton
-                        onPress={() => console.log('Recuperar Senha')}
-                        title="Recuperar Senha"
-                        style="link"
-                    />
-
+                            <StylizedButton
+                                onPress={() => console.log('Recuperar Senha')}
+                                title="Recuperar Senha"
+                                style="link"
+                                disabled={authIsLoading}
+                            />
+                        </>
+                    )}
                 </View>
 
             </View>
@@ -159,4 +189,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         textAlign: 'center'
     },
+    errorText: {
+        color: '#FF0000',
+        fontSize: 14,
+        textAlign: 'center',
+        marginTop: 10
+    }
 })
