@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import { Dimensions, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Pressable, RefreshControl } from "react-native";
+import { Dimensions, StyleSheet, Text, TouchableHighlight, TouchableOpacity, View, Pressable, RefreshControl, TextInput, KeyboardAvoidingView, Platform, Alert } from "react-native";
 import { ScrollView } from "react-native";
 import { Image } from 'expo-image';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -9,6 +9,7 @@ import PostButtons from "../../components/PostButtons";
 import { getTimeAgo } from "../../utils/dateUtils";
 import { addLike, removeLike, getPostagemById } from "../../service/postagemService";
 import { participarEvento, cancelarParticipacao } from "../../service/eventoService";
+import { createComentario } from "../../service/comentarioService";
 import { AuthContext } from "../../../context/AuthContext";
 
 export default function PostScreen({ route, navigation }) {
@@ -22,6 +23,10 @@ export default function PostScreen({ route, navigation }) {
     const [loading, setLoading] = useState(true);
     const [refreshing, setRefreshing] = useState(false);
     const [error, setError] = useState(null);
+
+    // Estados para comentário
+    const [comentarioTexto, setComentarioTexto] = useState('');
+    const [enviandoComentario, setEnviandoComentario] = useState(false);
 
     // Função para buscar os dados do post da API
     const fetchPost = async () => {
@@ -80,6 +85,51 @@ export default function PostScreen({ route, navigation }) {
             }
         } catch (error) {
             console.error('Erro ao processar like:', error);
+        }
+    };
+
+    // Função para criar comentário
+    const handleCreateComentario = async () => {
+        if (!comentarioTexto.trim()) {
+            Alert.alert('Atenção', 'Por favor, escreva um comentário.');
+            return;
+        }
+
+        if (!user || !user.id) {
+            Alert.alert('Erro', 'Você precisa estar logado para comentar.');
+            return;
+        }
+
+        try {
+            setEnviandoComentario(true);
+
+            const novoComentario = {
+                conteudo: comentarioTexto.trim(),
+                postagem: {
+                    id: postData.id
+                },
+                usuario: {
+                    id: user.id
+                }
+            };
+
+            await createComentario(novoComentario);
+
+            // Limpa o campo de texto
+            setComentarioTexto('');
+
+            // Recarrega o post para mostrar o novo comentário
+            await fetchPost();
+
+            Alert.alert('Sucesso', 'Comentário publicado!');
+        } catch (error) {
+            console.error('Erro ao criar comentário:', error);
+            Alert.alert(
+                'Erro',
+                error.response?.data?.message || 'Não foi possível publicar o comentário. Tente novamente.'
+            );
+        } finally {
+            setEnviandoComentario(false);
         }
     };
 
@@ -355,6 +405,50 @@ export default function PostScreen({ route, navigation }) {
                 {/** Comentários Area **/}
                 <View style={styles.commentsContainer}>
                     <Text style={styles.commentsTitle}>Comentários</Text>
+
+                    {/* Campo para novo comentário */}
+                    <View style={styles.comentarioInputContainer}>
+
+                        <View style={styles.comentarioInputWrapper}>
+                            <View style={styles.userImageContainer}>
+                                <Image
+                                    style={styles.userImage}
+                                    source={{
+                                        uri: user?.fotoPerfil || 'https://via.placeholder.com/150',
+                                    }}
+                                    contentFit="cover"
+                                    transition={300}
+                                />
+                            </View>
+                            <TextInput
+                                style={styles.comentarioInput}
+                                placeholder="Escreva um comentário..."
+                                placeholderTextColor="#999"
+                                value={comentarioTexto}
+                                onChangeText={setComentarioTexto}
+                                multiline
+                                maxLength={500}
+                                editable={!enviandoComentario}
+                            />
+                            <TouchableOpacity
+                                style={[
+                                    styles.comentarioButton,
+                                    (!comentarioTexto.trim() || enviandoComentario) && styles.comentarioButtonDisabled
+                                ]}
+                                onPress={handleCreateComentario}
+                                disabled={!comentarioTexto.trim() || enviandoComentario}
+                                activeOpacity={0.7}
+                            >
+                                <FontAwesome
+                                    name="send"
+                                    size={18}
+                                    color={comentarioTexto.trim() && !enviandoComentario ? "#fff" : "#ccc"}
+                                />
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+
+                    {/* Lista de comentários */}
                     {postData.comments && postData.comments.length > 0 ? (
                         postData.comments.map((comment, index) => (
                             <View key={index} style={styles.commentContainer}>
@@ -378,7 +472,7 @@ export default function PostScreen({ route, navigation }) {
                             </View>
                         ))
                     ) : (
-                        <Text style={styles.noComments}>Nenhum comentário ainda.</Text>
+                        <Text style={styles.noComments}>Nenhum comentário ainda. Seja o primeiro!</Text>
                     )}
                 </View>
             </ScrollView>
@@ -478,19 +572,62 @@ const styles = StyleSheet.create({
     commentsTitle: {
         fontSize: 20,
         fontWeight: 'bold',
-        marginBottom: 10,
+        marginBottom: 15,
+    },
+
+    comentarioInputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginBottom: 20,
+        gap: 10,
+    },
+
+    comentarioInputWrapper: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#fff',
+        borderRadius: 100,
+        borderWidth: 1,
+        borderColor: '#E0E0E0',
+        paddingHorizontal: 5,
+        paddingVertical: 5,
+    },
+
+    comentarioInput: {
+        flex: 1,
+        fontSize: 15,
+        color: '#333',
+        maxHeight: 100,
+        paddingVertical: 5,
+        paddingRight: 10,
+    },
+
+    comentarioButton: {
+        backgroundColor: '#9C2222',
+        borderRadius: 20,
+        width: 40,
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    comentarioButtonDisabled: {
+        backgroundColor: '#f5f5f5',
     },
 
     commentContainer: {
         marginBottom: 15,
         borderBottomWidth: 1,
-        borderBottomColor: '#B7B7B7',
+        borderBottomColor: '#E0E0E0',
         paddingBottom: 10,
     },
 
     noComments: {
         fontStyle: 'italic',
-        color: '#666',
+        color: '#999',
+        textAlign: 'center',
+        marginTop: 10,
     },
 
     // Estilos do Evento
