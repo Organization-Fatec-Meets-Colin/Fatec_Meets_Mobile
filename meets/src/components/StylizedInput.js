@@ -1,58 +1,40 @@
-import { SafeAreaViewBase, StyleSheet, Text, TextInput, Touchable, TouchableHighlight, TouchableOpacity, View } from 'react-native';
+import { TextInput, TouchableHighlight, View, StyleSheet } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
-export default function StylizedInput({ title, value, onChangeText, placeholder, securityTextEntry, icon, onPress}) {
-    
+export default function StylizedInput({ value, onchangeText, placeholder, secureTextEntry, icon, onPressIcon, isPassword, ...rest }) {
     return (
         <View style={styles.inputContainer}>
-            <Text style={styles.inputText}>
-                {title}
-            </Text>
-            <View style={styles.subContainerInput}>
-                <TextInput
-                    style={styles.input}
-                    placeholder={placeholder}
-                    value={value}
-                    onChangeText={onChangeText}
-                    secureTextEntry={securityTextEntry}
-                    // {...rest}
-                />
-                {value && (
-                    <TouchableOpacity onPress={onPress}>
-                        <MaterialIcons name={icon} size={24} color="#979797ff" />
-                    </TouchableOpacity>
-                )}
-            </View>
+            <TextInput
+                placeholder={placeholder}
+                value={value}
+                onChangeText={onchangeText}
+                secureTextEntry={secureTextEntry}
+                style={styles.input}
+                {...rest}
+            />
+            {isPassword && value && (
+                <TouchableHighlight onPress={onPressIcon} style={{ borderRadius: 100 }}>
+                    <MaterialIcons name={icon} size={24} color="#979797ff" />
+                </TouchableHighlight>
+            )}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
-    // Parte de Inserir
-    inputContainer:{
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-    },
-
-    inputText:{
-        marginBottom: 20,
-        fontSize: 20,
-    },
-
-    subContainerInput:{
+    inputContainer: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
+        width: '100%',
+        paddingHorizontal: 20,
+        borderRadius: 100,
         borderWidth: 1,
         borderColor: '#979797ff',
-        borderRadius: 50,
-        width: '100%',
-        justifyContent: 'space-between',
-        paddingHorizontal: 20,
     },
 
-    input:{
-        width: '85%',
+    input: {
         height: 50,
+        width: '85%',
     },
 })

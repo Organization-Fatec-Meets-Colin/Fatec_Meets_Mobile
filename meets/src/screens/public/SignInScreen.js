@@ -4,18 +4,21 @@ import { useContext, useState } from "react";
 import { SafeAreaViewBase, StyleSheet, Text, TextInput, TouchableHighlight, View, Alert, ActivityIndicator } from "react-native";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import StylizedInput from "../../components/StylizedInput";
-import { AuthContext } from "../../../context/AuthContext";
 import StylizedButton from "../../components/StylizedButton";
+import { AuthContext } from "../../../context/AuthContext";
 
-export default function LoginScreen({ navigation }) {
-    const { login, authIsLoading, error } = useContext(AuthContext);
+export default function SignInScreen({ navigation }) {
+    const { register, authIsLoading, error } = useContext(AuthContext);
+
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(true);
 
-    async function handleLogin() {
-        // Validações básicas
-        if (!email.trim() || !password.trim()) {
+    async function handleSignIn() {
+        // Validações
+        if (!name.trim() || !email.trim() || !password.trim() || !confirmPassword.trim()) {
             Alert.alert('Erro', 'Por favor, preencha todos os campos');
             return;
         }
@@ -25,14 +28,32 @@ export default function LoginScreen({ navigation }) {
             return;
         }
 
-        // Fazer login usando o service
-        const result = await login(email.trim(), password);
+        if (password.length < 6) {
+            Alert.alert('Erro', 'A senha deve ter no mínimo 6 caracteres');
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            Alert.alert('Erro', 'As senhas não coincidem');
+            return;
+        }
+
+        // Registrar usando o service
+        const result = await register(name.trim(), email.trim(), password);
 
         if (result.success) {
-            Alert.alert('Sucesso', `Bem-vindo, ${result.user.nome}!`);
-            navigation.navigate('Home');
+            Alert.alert(
+                'Sucesso!',
+                'Conta criada com sucesso!',
+                [
+                    {
+                        text: 'OK',
+                        onPress: () => navigation.navigate('Home')
+                    }
+                ]
+            );
         } else {
-            Alert.alert('Erro no Login', result.error || 'Email ou senha inválidos');
+            Alert.alert('Erro ao Criar Conta', result.error || 'Não foi possível criar a conta');
         }
     }
 
@@ -42,8 +63,16 @@ export default function LoginScreen({ navigation }) {
 
             <View style={styles.formContainer}>
                 <Text style={styles.title}>
-                    ACESSE O SEU LOGIN
+                    FAÇA SEU CADASTRO
                 </Text>
+
+                <StylizedInput
+                    value={name}
+                    onchangeText={setName}
+                    placeholder="Nome de Usuário"
+                    keyboardType="default"
+                    autoCorrect={false}
+                />
 
                 <StylizedInput
                     value={email}
@@ -54,25 +83,31 @@ export default function LoginScreen({ navigation }) {
                     autoCorrect={false}
                 />
 
-                <View style={styles.inputContainer}>
-                    <TextInput
-                        placeholder="Senha"
-                        secureTextEntry={showPassword}
-                        value={password}
-                        onChangeText={setPassword}
-                        autoCapitalize="none"
-                        style={styles.input}
-                    />
-                    {password && (
-                        <TouchableHighlight onPress={() => setShowPassword(!showPassword)} style={{ borderRadius: 100 }}>
-                            <MaterialIcons name={showPassword ? "visibility" : "visibility-off"} size={24} color="#979797ff" />
-                        </TouchableHighlight>
-                    )}
-                </View>
+                <StylizedInput
+                    value={password}
+                    onchangeText={setPassword}
+                    placeholder="Senha"
+                    keyboardType="default"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={showPassword}
+                    icon={showPassword ? "visibility" : "visibility-off"}
+                    isPassword={true}
+                    onPressIcon={() => setShowPassword(!showPassword)}
+                />
 
-                {error && (
-                    <Text style={styles.errorText}>{error}</Text>
-                )}
+                <StylizedInput
+                    value={confirmPassword}
+                    onchangeText={setConfirmPassword}
+                    placeholder="Confirmar Senha"
+                    keyboardType="default"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    secureTextEntry={showPassword}
+                    icon={showPassword ? "visibility" : "visibility-off"}
+                    isPassword={true}
+                    onPressIcon={() => setShowPassword(!showPassword)}
+                />
 
                 <View style={styles.container}>
                     {authIsLoading ? (
@@ -80,14 +115,14 @@ export default function LoginScreen({ navigation }) {
                     ) : (
                         <>
                             <StylizedButton
-                                onPress={handleLogin}
-                                title="Entrar"
+                                onPress={handleSignIn}
+                                title="Criar Conta"
                                 disabled={authIsLoading}
                             />
 
                             <StylizedButton
-                                onPress={() => navigation.popTo('SignIn')}
-                                title="Criar Conta"
+                                onPress={() => navigation.popTo('Login')}
+                                title="Fazer Login"
                                 style="secondary"
                                 disabled={authIsLoading}
                             />
@@ -100,7 +135,12 @@ export default function LoginScreen({ navigation }) {
                             />
                         </>
                     )}
+
                 </View>
+
+                {error && (
+                    <Text style={styles.errorText}>{error}</Text>
+                )}
 
             </View>
         </View>
